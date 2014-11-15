@@ -29,6 +29,7 @@ class Extractor
 
         $currentGame = 0;
         $gameData = [];
+        $lastLogTime = 0;
 
         foreach($lines as $event) {
             $time = (int) substr($event, 0, 10);
@@ -73,9 +74,16 @@ class Extractor
             if(isset($data['type'])) {
                 $gameData[$currentGame]['events'][] = $data;
             }
+
+            if ($time > $lastLogTime) {
+                $lastLogTime = $time;
+            }
         }
 
-        return array_values($gameData);
+        return [
+            'lastlog_time' => $lastLogTime,
+            'games' => array_values($gameData)
+        ];
     }
 
     private function parseEvent($line)
