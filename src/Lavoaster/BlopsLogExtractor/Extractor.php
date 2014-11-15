@@ -20,9 +20,10 @@ class Extractor
     /**
      * Parses the log file and returns a formatted array
      *
+     * @param int $skipto - timestamp to skip processing to
      * @return array
      */
-    public function parse()
+    public function parse($skipto = 0)
     {
         $lines = explode("\n", $this->file);
 
@@ -32,6 +33,8 @@ class Extractor
         foreach($lines as $event) {
             $time = (int) substr($event, 0, 10);
             $eventData = substr($event, 11);
+            
+            if($time < $skipto) continue;
 
             // Skip these lines
             if ($eventData == '------------------------------------------------------------') continue;
