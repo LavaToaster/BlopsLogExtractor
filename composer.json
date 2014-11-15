@@ -1,6 +1,7 @@
 {
     "name": "lavoaster/blops-log-extractor",
     "description": "BlackOps log file extractor",
+    "license": "MIT",
     "authors": [
         {
             "name": "Adam Lavin",
