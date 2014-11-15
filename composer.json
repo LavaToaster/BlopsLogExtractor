@@ -1,6 +1,6 @@
 {
     "name": "lavoaster/blops-log-extractor",
-    "description": "",
+    "description": "BlackOps log file extractor",
     "authors": [
         {
             "name": "Adam Lavin",
