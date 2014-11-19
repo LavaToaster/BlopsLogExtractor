@@ -31,11 +31,14 @@ class Extractor
         $gameData = [];
         $lastLogTime = 0;
 
+
         foreach($lines as $event) {
             $time = (int) substr($event, 0, 10);
             $eventData = substr($event, 11);
-            
-            if($time < $skipto) continue;
+
+            if ($time > $lastLogTime) {
+                $lastLogTime = $time;
+            }
 
             // Skip these lines
             if ($eventData == '------------------------------------------------------------') continue;
@@ -51,6 +54,13 @@ class Extractor
                 unset($settings['g_gametype'], $settings['mapname']);
 
                 $gameData[$currentGame]['settings'] = $settings;
+
+                $gameData[$currentGame]['skip'] = false;
+
+                if ($time < $skipto) {
+                    $gameData[$currentGame]['skip'] = true;
+                }
+
                 continue;
             }
 
@@ -59,24 +69,28 @@ class Extractor
                 continue;
             }
 
-            $data = [
-                'time' => $time
-            ];
+            if($time < $skipto) continue;
+
+            $data = [];
 
             if (strpos($eventData, ';') !== false) {
-                $action = $this->parseEvent($eventData);
-
-                if ($action) {
-                    $data = $data + $action;
+                if ($action = $this->parseEvent($eventData)) {
+                    $data = $action;
                 }
             }
+
+            $data['time'] = $time;
 
             if(isset($data['type'])) {
                 $gameData[$currentGame]['events'][] = $data;
             }
+        }
 
-            if ($time > $lastLogTime) {
-                $lastLogTime = $time;
+        if($skipto) {
+            foreach($gameData as $key => $game) {
+                if(!isset($game['event'])) {
+                    unset($gameData[$key]['event']);
+                }
             }
         }
 
