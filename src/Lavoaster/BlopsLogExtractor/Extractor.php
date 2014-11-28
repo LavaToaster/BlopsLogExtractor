@@ -128,7 +128,7 @@ class Extractor
             ];
         } elseif ($type == 'D') {
             $data = [
-                'type' => 'death',
+                'type' => 'damage',
                 'data' => [
                     'killed_player_id' => $line[1],
                     'killed_player_slot' => $line[2],
