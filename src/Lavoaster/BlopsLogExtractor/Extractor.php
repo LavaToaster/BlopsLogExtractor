@@ -155,7 +155,7 @@ class Extractor
             ];
         } elseif ($type == 'Q') {
             $data = [
-                'type' => 'join',
+                'type' => 'quit',
                 'data' => [
                     'player_id' => $line[1],
                     'player_slot' => $line[2],
